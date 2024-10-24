@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ANoticeMapper">
+    
+    <resultMap type="ANotice" id="ANoticeResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="publishTime"    column="publish_time"    />
+        <result property="views"    column="views"    />
+        <result property="author"    column="author"    />
+        <result property="content"    column="content"    />
+    </resultMap>
+
+    <sql id="selectANoticeVo">
+        select id, title, publish_time, views, author, content from a_notice
+    </sql>
+
+    <select id="selectANoticeList" parameterType="ANotice" resultMap="ANoticeResult">
+        <include refid="selectANoticeVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="publishTime != null "> and publish_time = #{publishTime}</if>
+            <if test="views != null "> and views = #{views}</if>
+            <if test="author != null  and author != ''"> and author = #{author}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+        </where>
+    </select>
+    
+    <select id="selectANoticeById" parameterType="Long" resultMap="ANoticeResult">
+        <include refid="selectANoticeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertANotice" parameterType="ANotice" useGeneratedKeys="true" keyProperty="id">
+        insert into a_notice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="publishTime != null">publish_time,</if>
+            <if test="views != null">views,</if>
+            <if test="author != null">author,</if>
+            <if test="content != null">content,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="publishTime != null">#{publishTime},</if>
+            <if test="views != null">#{views},</if>
+            <if test="author != null">#{author},</if>
+            <if test="content != null">#{content},</if>
+         </trim>
+    </insert>
+
+    <update id="updateANotice" parameterType="ANotice">
+        update a_notice
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="publishTime != null">publish_time = #{publishTime},</if>
+            <if test="views != null">views = #{views},</if>
+            <if test="author != null">author = #{author},</if>
+            <if test="content != null">content = #{content},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteANoticeById" parameterType="Long">
+        delete from a_notice where id = #{id}
+    </delete>
+
+    <delete id="deleteANoticeByIds" parameterType="String">
+        delete from a_notice where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

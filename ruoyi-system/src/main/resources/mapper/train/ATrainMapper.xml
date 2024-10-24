@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ATrainMapper">
+    
+    <resultMap type="ATrain" id="ATrainResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="description"    column="description"    />
+        <result property="trainLeader"    column="train_leader"    />
+        <result property="phone"    column="phone"    />
+        <result property="trainTime"    column="train_time"    />
+        <result property="trainRoomId"    column="train_room_id"    />
+        <result property="trainCapacity"    column="train_capacity"    />
+        <result property="trainRequire"    column="train_require"    />
+        <result property="notice"    column="notice"    />
+        <result property="trainTarget"    column="train_target"    />
+        <result property="participants"    column="participants"    />
+    </resultMap>
+
+    <sql id="selectATrainVo">
+        select id, name, description, train_leader, phone, train_time, train_room_id, train_capacity, train_require, notice, train_target, participants from a_train
+    </sql>
+
+    <select id="selectATrainList" parameterType="ATrain" resultMap="ATrainResult">
+        <include refid="selectATrainVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="trainLeader != null  and trainLeader != ''"> and train_leader = #{trainLeader}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="trainTime != null "> and train_time = #{trainTime}</if>
+            <if test="trainRoomId != null "> and train_room_id = #{trainRoomId}</if>
+            <if test="trainCapacity != null "> and train_capacity = #{trainCapacity}</if>
+            <if test="trainRequire != null  and trainRequire != ''"> and train_require = #{trainRequire}</if>
+            <if test="notice != null  and notice != ''"> and notice = #{notice}</if>
+            <if test="trainTarget != null  and trainTarget != ''"> and train_target = #{trainTarget}</if>
+            <if test="participants != null  and participants != ''"> and participants = #{participants}</if>
+        </where>
+    </select>
+    
+    <select id="selectATrainById" parameterType="Long" resultMap="ATrainResult">
+        <include refid="selectATrainVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertATrain" parameterType="ATrain" useGeneratedKeys="true" keyProperty="id">
+        insert into a_train
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="description != null">description,</if>
+            <if test="trainLeader != null">train_leader,</if>
+            <if test="phone != null">phone,</if>
+            <if test="trainTime != null">train_time,</if>
+            <if test="trainRoomId != null">train_room_id,</if>
+            <if test="trainCapacity != null">train_capacity,</if>
+            <if test="trainRequire != null">train_require,</if>
+            <if test="notice != null">notice,</if>
+            <if test="trainTarget != null">train_target,</if>
+            <if test="participants != null">participants,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="description != null">#{description},</if>
+            <if test="trainLeader != null">#{trainLeader},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="trainTime != null">#{trainTime},</if>
+            <if test="trainRoomId != null">#{trainRoomId},</if>
+            <if test="trainCapacity != null">#{trainCapacity},</if>
+            <if test="trainRequire != null">#{trainRequire},</if>
+            <if test="notice != null">#{notice},</if>
+            <if test="trainTarget != null">#{trainTarget},</if>
+            <if test="participants != null">#{participants},</if>
+         </trim>
+    </insert>
+
+    <update id="updateATrain" parameterType="ATrain">
+        update a_train
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="trainLeader != null">train_leader = #{trainLeader},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="trainTime != null">train_time = #{trainTime},</if>
+            <if test="trainRoomId != null">train_room_id = #{trainRoomId},</if>
+            <if test="trainCapacity != null">train_capacity = #{trainCapacity},</if>
+            <if test="trainRequire != null">train_require = #{trainRequire},</if>
+            <if test="notice != null">notice = #{notice},</if>
+            <if test="trainTarget != null">train_target = #{trainTarget},</if>
+            <if test="participants != null">participants = #{participants},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteATrainById" parameterType="Long">
+        delete from a_train where id = #{id}
+    </delete>
+
+    <delete id="deleteATrainByIds" parameterType="String">
+        delete from a_train where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

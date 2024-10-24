@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ATrainRoomMapper">
+    
+    <resultMap type="ATrainRoom" id="ATrainRoomResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="place"    column="place"    />
+        <result property="userCapacity"    column="user_capacity"    />
+        <result property="equipment"    column="equipment"    />
+        <result property="useStatus"    column="use_status"    />
+        <result property="roomLeader"    column="room_leader"    />
+        <result property="openStartTime"    column="open_start_time"    />
+        <result property="openEndTime"    column="open_end_time"    />
+        <result property="leaderContact"    column="leader_contact"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectATrainRoomVo">
+        select id, name, place, user_capacity, equipment, use_status, room_leader, open_start_time, open_end_time, leader_contact, remark from a_train_room
+    </sql>
+
+    <select id="selectATrainRoomList" parameterType="ATrainRoom" resultMap="ATrainRoomResult">
+        <include refid="selectATrainRoomVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="place != null  and place != ''"> and place = #{place}</if>
+            <if test="userCapacity != null "> and user_capacity = #{userCapacity}</if>
+            <if test="equipment != null  and equipment != ''"> and equipment = #{equipment}</if>
+            <if test="useStatus != null "> and use_status = #{useStatus}</if>
+            <if test="roomLeader != null  and roomLeader != ''"> and room_leader like concat('%', #{roomLeader}, '%')</if>
+            <if test="params.beginOpenStartTime != null and params.beginOpenStartTime != '' and params.endOpenStartTime != null and params.endOpenStartTime != ''"> and open_start_time between #{params.beginOpenStartTime} and #{params.endOpenStartTime}</if>
+            <if test="params.beginOpenEndTime != null and params.beginOpenEndTime != '' and params.endOpenEndTime != null and params.endOpenEndTime != ''"> and open_end_time between #{params.beginOpenEndTime} and #{params.endOpenEndTime}</if>
+            <if test="leaderContact != null  and leaderContact != ''"> and leader_contact like concat('%', #{leaderContact}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectATrainRoomById" parameterType="Long" resultMap="ATrainRoomResult">
+        <include refid="selectATrainRoomVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertATrainRoom" parameterType="ATrainRoom" useGeneratedKeys="true" keyProperty="id">
+        insert into a_train_room
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="place != null">place,</if>
+            <if test="userCapacity != null">user_capacity,</if>
+            <if test="equipment != null">equipment,</if>
+            <if test="useStatus != null">use_status,</if>
+            <if test="roomLeader != null">room_leader,</if>
+            <if test="openStartTime != null">open_start_time,</if>
+            <if test="openEndTime != null">open_end_time,</if>
+            <if test="leaderContact != null">leader_contact,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="place != null">#{place},</if>
+            <if test="userCapacity != null">#{userCapacity},</if>
+            <if test="equipment != null">#{equipment},</if>
+            <if test="useStatus != null">#{useStatus},</if>
+            <if test="roomLeader != null">#{roomLeader},</if>
+            <if test="openStartTime != null">#{openStartTime},</if>
+            <if test="openEndTime != null">#{openEndTime},</if>
+            <if test="leaderContact != null">#{leaderContact},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateATrainRoom" parameterType="ATrainRoom">
+        update a_train_room
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="place != null">place = #{place},</if>
+            <if test="userCapacity != null">user_capacity = #{userCapacity},</if>
+            <if test="equipment != null">equipment = #{equipment},</if>
+            <if test="useStatus != null">use_status = #{useStatus},</if>
+            <if test="roomLeader != null">room_leader = #{roomLeader},</if>
+            <if test="openStartTime != null">open_start_time = #{openStartTime},</if>
+            <if test="openEndTime != null">open_end_time = #{openEndTime},</if>
+            <if test="leaderContact != null">leader_contact = #{leaderContact},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteATrainRoomById" parameterType="Long">
+        delete from a_train_room where id = #{id}
+    </delete>
+
+    <delete id="deleteATrainRoomByIds" parameterType="String">
+        delete from a_train_room where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
